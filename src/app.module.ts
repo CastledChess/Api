@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as path from 'path';
-import { I18nModule } from 'nestjs-i18n';
+import { I18nModule, QueryResolver, CookieResolver } from 'nestjs-i18n';
 
 @Module({
   imports: [
@@ -12,6 +12,7 @@ import { I18nModule } from 'nestjs-i18n';
         path: path.join(__dirname, '/i18n/'),
         watch: true,
       },
+      resolvers: [{ use: QueryResolver, options: ['lang'] }, CookieResolver],
     }),
   ],
   controllers: [AppController],
