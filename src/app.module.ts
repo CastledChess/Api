@@ -5,7 +5,7 @@ import { I18nModule } from 'nestjs-i18n';
 import { i18nConfig } from './i18n/i18n.config';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
-import databaseConfig from './config/database.config';
+import databaseConfig from './database/database.config';
 
 @Module({
   imports: [

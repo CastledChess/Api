@@ -1,1 +1,1 @@
-export * from './database.constants';
+export * from '../../database/database.constants';
