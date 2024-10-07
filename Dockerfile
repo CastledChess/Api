@@ -11,4 +11,4 @@ RUN cp -a /tmp/app/node_modules /usr/src/app
 
 WORKDIR /usr/src/app
 
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start"]
