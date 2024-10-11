@@ -5,5 +5,4 @@ export const swaggerConfig = new DocumentBuilder()
   .setTitle(packageJson.name)
   .setDescription(packageJson.description)
   .setVersion(packageJson.version)
-  .addTag('API')
   .build();
