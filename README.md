@@ -14,6 +14,7 @@ Ce projet est une API REST pour l'outil d'analyse de parties d'échecs "Castled"
 ## Prérequis
 Assurez-vous d'avoir installé les outils suivants :
 - Docker Desktop  ou Docker Engine & Docker Compose
+- Node.js
 - Git
 - Visual Studio Code ou un autre Éditeur de Texte ou IDE
 
@@ -43,7 +44,7 @@ Pour lancer l'application NestJs dans des conteneurs Docker, suivez les étapes 
     ```
 4. Téléchargez les dépendances Node :
     ```sh
-    docker exec -it castled-api npm install
+    npm install
     ```
 
 ## Lancement Du Projet Après Installation

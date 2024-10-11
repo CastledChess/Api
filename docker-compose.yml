@@ -6,6 +6,7 @@ services:
     container_name: castled-api
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules
     # On expose le port de l'application.
     # Généralement, le port 3000 est utilisé.
     # On utilise la variable d'environnement définie dans le fichier .env.
