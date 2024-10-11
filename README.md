@@ -41,6 +41,10 @@ Pour lancer l'application NestJs dans des conteneurs Docker, suivez les étapes 
     ```sh
     docker compose up --build -d
     ```
+4. Téléchargez les dépendances Node :
+    ```sh
+    docker exec -it castled-api npm install
+    ```
 
 ## Lancement Du Projet Après Installation
 Pour lancer le projet après l'installation, suivez les étapes suivantes :
