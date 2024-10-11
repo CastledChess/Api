@@ -1,44 +1,42 @@
 services:
-  web:
-    image: nginx:latest
-    ports:
-      - '80:80'
-      - '443:443' # Ajoutez le port 443 pour HTTPS
-    volumes:
-      - './nginx/default.conf:/etc/nginx/conf.d/default.conf'
-      - './nginx/ssl/server.crt:/etc/nginx/server.crt' # Ajoutez le certificat SSL
-      - './nginx/ssl/server.key:/etc/nginx/server.key' # Ajoutez la clé SSL
-    networks:
-      - castled_api_network
-    depends_on:
-      - app
-
-  #
+  # Service pour l'API NestJS.
   app:
+    # On utilise l'image du Dockerfile.
     build: .
+    container_name: castled-api
     volumes:
       - .:/usr/src/app
+    # On expose le port de l'application.
+    # Généralement, le port 3000 est utilisé.
+    # On utilise la variable d'environnement définie dans le fichier .env.
+    ports:
+      - '${APP_PORT}:${APP_PORT}'
     depends_on:
-      - db
+      - postgres
     networks:
-      - castled_api_network
+      - castled_api
 
-  # Service pour la base de données PostgreSQL
-  db:
+  # Service pour la base de données PostgreSQL.
+  postgres:
     image: postgres:latest
+    container_name: castled-postgres
+    # On expose le port de la base de données.
+    # Généralement, le port 5432 est utilisé.
     ports:
       - '${DATABASE_PORT}:${DATABASE_PORT}'
+    # On définit les variables d'environnement.
+    # Elles sont présentes dans le fichier .env
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_DB}
     volumes:
-      - 'db_data:/var/lib/postgresql/data'
+      - 'postgres_data:/var/lib/postgresql/data'
     networks:
-      - castled_api_network
+      - castled_api
 
 volumes:
-  db_data:
+  postgres_data:
 
 networks:
-  castled_api_network:
+  castled_api:

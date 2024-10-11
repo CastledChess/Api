@@ -1,85 +1,78 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Castled API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Ce projet est une API REST pour l'outil d'analyse de parties d'échecs "Castled". Il est développé avec NestJs, un framework Node.js.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Table des Matières
+1. [Prérequis](#prérequis)
+2. [Téléchargement du Projet](#téléchargement-du-projet)
+3. [Configuration de l'Environnement](#configuration-de-lenvironnement)
+   - [Docker](#docker)
+4. [Lancement Du Projet Après Installation](#lancement-du-projet-après-installation)
+   - [Avec Docker](#avec-docker)
+5. [Lancer les commandes dans les conteneurs Docker](#lancer-les-commandes-dans-les-conteneurs-Docker)
 
-## Description
+## Prérequis
+Assurez-vous d'avoir installé les outils suivants :
+- Docker Desktop  ou Docker Engine & Docker Compose
+- Git
+- Visual Studio Code ou un autre Éditeur de Texte ou IDE
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Téléchargement du Projet
+Exécutez la commande suivante dans le répertoire souhaité (Un répertoire dans votre **distro WSL2 est recommandé si vous utilisez Windows**) :
 
-## Project setup
-
-```bash
-$ npm install
+```sh
+https://github.com/CastledChess/Api.git
 ```
 
-## Compile and run the project
+## Configuration de l'Environnement
+**Ouvrez le projet dans votre IDE** et suivez les étapes suivantes pour configurer l'environnement.
 
-```bash
-# development
-$ npm run start
+### Docker
+Pour lancer l'application NestJs dans des conteneurs Docker, suivez les étapes suivantes :
 
-# watch mode
-$ npm run start:dev
+1. Ouvrez votre terminal à la racine du projet et copiez le fichier `.env.example` et renommez-le `.env` :
+    ```sh
+    cp .env.example .env
+    ```
 
-# production mode
-$ npm run start:prod
+2. Modifiez le fichier `.env` pour **configurer les variables d'environnement nécessaires**.
+
+3. Démarrez les conteneurs Docker :
+    ```sh
+    docker compose up --build -d
+    ```
+4. Téléchargez les dépendances Node :
+    ```sh
+    docker exec -it castled-api npm install
+    ```
+
+## Lancement Du Projet Après Installation
+Pour lancer le projet après l'installation, suivez les étapes suivantes :
+
+### Avec Docker
+
+Lancez les conteneurs Docker :
+```sh
+docker compose up -d
 ```
 
-## Run tests
+## Lancer les commandes dans les conteneurs Docker
+Lorsque vous voulez utiliser des commandes Node ou vous connecter à la base de données, vous devez exécuter ces commandes à l'intérieur des conteneurs Docker :
 
-```bash
-# unit tests
-$ npm run test
+```sh
+docker exec -it <nom_du_conteneur> <la_commande>
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Exemple
+docker exec -it castled-api nest g module users
+docker exec -it castled-postgres psql -U postgres
 ```
 
-## Resources
+Ou vous pouvez ouvrir un terminal directement dans le conteneur Docker :
 
-Check out a few resources that may come in handy when working with NestJS:
+```sh
+docker exec -it <nom_du_conteneur> sh
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+# Exemple
+docker exec -it castled-api sh
+docker exec -it castled-postgres sh
+```
