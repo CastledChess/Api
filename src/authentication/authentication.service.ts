@@ -6,6 +6,7 @@ import { LoginRequestDto } from './dto/request/login-request.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserDto } from '../common/dto/user.dto';
 import { AuthenticationResponseDto } from './dto/response/authentication-response.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthenticationService {
@@ -40,7 +41,7 @@ export class AuthenticationService {
 
   async validateUser(loginDto: LoginRequestDto): Promise<User> {
     const user: User = await this.usersService.findOne(loginDto.email);
-    if (!user || user.password !== loginDto.password) {
+    if (!user || !(await bcrypt.compare(loginDto.password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
     return user;
