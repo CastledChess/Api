@@ -13,13 +13,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const message = exception instanceof HttpException ? exception.getResponse() : exception;
 
-    console.log('message', message);
-    console.log('status', status);
-    console.log('exception', exception);
     this.logger.error(`Status: ${status} Error: ${JSON.stringify(message)}`);
 
     response.status(status).json({
-      statusCode: status,
+      status: 'error',
       timestamp: new Date().toISOString(),
       path: request.url,
       message,
