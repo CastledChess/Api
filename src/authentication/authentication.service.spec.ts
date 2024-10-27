@@ -3,6 +3,8 @@ import { AuthenticationService } from './authentication.service';
 import { I18nService } from 'nestjs-i18n';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;
@@ -22,6 +24,16 @@ describe('AuthenticationService', () => {
         {
           provide: 'UserRepository',
           useValue: {},
+        },
+        {
+          provide: HttpService,
+          useValue: {},
+        },
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn().mockReturnValue('mocked-token'), // Mock the get method
+          },
         },
         {
           provide: I18nService,
