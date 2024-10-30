@@ -17,7 +17,6 @@ import { AuthenticationModule } from './authentication/authentication.module';
     }),
     DatabaseModule,
     I18nModule.forRoot(i18nConfig),
-    DatabaseModule,
     AuthenticationModule,
     UsersModule,
   ],
