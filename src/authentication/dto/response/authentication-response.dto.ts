@@ -3,17 +3,17 @@ import { UserDto } from '../../../common/dto/user.dto';
 
 export class AuthenticationResponseDto {
   @ApiProperty({ description: "Access token de l'utilisateur" })
-  access_token: string;
+  accessToken: string;
 
   @ApiProperty({ description: "Refresh token de l'utilisateur" })
-  refresh_token: string;
+  refreshToken: string;
 
   @ApiProperty({ description: "Informations de l'utilisateur" })
   user: UserDto;
 
-  constructor(access_token: string, refresh_token: string, user: UserDto) {
-    this.access_token = access_token;
-    this.refresh_token = refresh_token;
+  constructor(accessToken: string, refreshToken: string, user: UserDto) {
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
     this.user = user;
   }
 }
