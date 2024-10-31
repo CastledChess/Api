@@ -21,6 +21,7 @@ export class AuthenticationController {
   @ApiBody({ type: LoginRequestDto })
   @ApiResponse({ status: 200, description: 'Connexion réussie.' })
   @ApiResponse({ status: 401, description: 'Identifiants invalides.' })
+  @ApiResponse({ status: 400, description: 'Requête invalide.' })
   @UseGuards(LocalAuthGuard)
   @HttpCode(200)
   @Post('login')
@@ -39,6 +40,7 @@ export class AuthenticationController {
   @ApiBody({ type: CreateUserDto })
   @ApiResponse({ status: 201, description: 'Inscription réussie.' })
   @ApiResponse({ status: 409, description: "L'utilisateur existe déjà." })
+  @ApiResponse({ status: 400, description: 'Requête invalide.' })
   @Post('register')
   async signUp(@Body() createUserDto: CreateUserDto): Promise<AuthenticationResponseDto> {
     return this.authService.register(createUserDto);

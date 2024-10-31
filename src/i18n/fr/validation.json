@@ -1,23 +1,12 @@
 {
-  "validation": {
-    "isNotEmpty": "Le champ {property} ne doit pas être vide",
-    "isEmail": "Le champ {property} doit être une adresse e-mail valide",
-    "isString": "Le champ {property} doit être une chaîne de caractères",
-    "isNumber": "Le champ {property} doit être un nombre",
-    "minLength": "Le champ {property} doit contenir au moins {constraints.0} caractères",
-    "maxLength": "Le champ {property} ne doit pas dépasser {constraints.0} caractères",
-    "isInt": "Le champ {property} doit être un entier",
-    "isPositive": "Le champ {property} doit être un nombre positif",
-    "isNegative": "Le champ {property} doit être un nombre négatif",
-    "isBoolean": "Le champ {property} doit être un booléen",
-    "isArray": "Le champ {property} doit être un tableau",
-    "isDate": "Le champ {property} doit être une date valide",
-    "isIn": "Le champ {property} doit être l'une des valeurs suivantes : {constraints.0}",
-    "isUUID": "Le champ {property} doit être un UUID valide",
-    "isUrl": "Le champ {property} doit être une URL valide",
-    "isOptional": "Le champ {property} est optionnel",
-    "equals": "Le champ {property} doit être égal à {constraints.0}",
-    "min": "La valeur de {property} doit être supérieure ou égale à {constraints.0}",
-    "max": "La valeur de {property} doit être inférieure ou égale à {constraints.0}"
-  }
+  "IS_NOT_EMPTY": "{property} ne peut pas être vide",
+  "IS_EMAIL": "l'email est invalide",
+  "IS_STRONG_PASSWORD": "Le {property} n'est pas assez fort. Il doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.",
+  "MIN": "{property} doit contenir au moins {min} caractères",
+  "MAX": "{property} doit contenir au plus {max} caractères",
+  "IS_BOOLEAN": "{property} n'est pas un booléen",
+  "IS_DATE": "{property} n'est pas une date",
+  "IS_NUMBER": "{property} n'est pas un nombre",
+  "IS_STRING": "{property} n'est pas une chaîne de caractères",
+  "IS_DEFINED": "{property} doit être défini"
 }

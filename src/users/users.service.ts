@@ -4,6 +4,7 @@ import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../authentication/dto/request/create-user.dto';
 import { I18nService } from 'nestjs-i18n';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -19,7 +20,11 @@ export class UsersService {
       throw new ConflictException(this.i18n.translate('user.errors.alreadyExists'));
     }
 
-    const user = this.usersRepository.create({ ...createUserDto });
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    const user = this.usersRepository.create({
+      ...createUserDto,
+      password: hashedPassword,
+    });
     return this.usersRepository.save(user);
   }
 
