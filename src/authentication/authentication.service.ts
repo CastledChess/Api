@@ -58,7 +58,7 @@ export class AuthenticationService {
   }
 
   private generateUserDto(user: User): UserDto {
-    return new UserDto(user.id.toString(), user.email, user.username);
+    return new UserDto(user.id, user.email, user.username);
   }
 
   private generateLoginResponseDto(accessToken: string, refreshToken: string, user: User): AuthenticationResponseDto {
