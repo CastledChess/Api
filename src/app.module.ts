@@ -1,19 +1,24 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import * as path from 'path';
-import { I18nModule, QueryResolver, AcceptLanguageResolver } from 'nestjs-i18n';
+import { I18nModule } from 'nestjs-i18n';
+import { i18nConfig } from './i18n/i18n.config';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from './database/database.module';
+import { UsersModule } from './users/users.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @Module({
   imports: [
-    I18nModule.forRoot({
-      fallbackLanguage: 'fr',
-      loaderOptions: {
-        path: path.join(__dirname, '/i18n/'),
-        watch: true,
-      },
-      resolvers: [{ use: QueryResolver, options: ['lang'] }, AcceptLanguageResolver],
+    ConfigModule.forRoot({
+      isGlobal: true,
+      // Si vous modifiez le fichier .env, vous devrez redémarrer le serveur
+      cache: true, // Pour éviter de lire le fichier à chaque fois
     }),
+    DatabaseModule,
+    I18nModule.forRoot(i18nConfig),
+    AuthenticationModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
