@@ -17,6 +17,7 @@ async function bootstrap() {
       transform: true, // Transforme les types automatiquement
     }),
   );
+  app.enableCors();
   const apiMajorVersion = packageJson.version.split('.')[0];
   // Si la version majeure de l'API est 0, on le définit à 1 sinon on garde la version actuelle
   app.setGlobalPrefix('api/' + (apiMajorVersion === '0' ? 'v1' : 'v' + apiMajorVersion));
