@@ -11,5 +11,4 @@ export const getDatabaseConfig = (): TypeOrmModuleOptions => ({
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   // Si on est en production, on ne veut pas synchroniser pour éviter de perdre des données
   synchronize: process.env.NODE_ENV === 'development',
-  url: process.env.NODE_ENV === 'production' ? process.env.POSTGRES_URL : undefined,
 });
