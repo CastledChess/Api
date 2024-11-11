@@ -7,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { LichessStrategyModule } from './lichess-strategy/lichess-strategy.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { AuthenticationModule } from './authentication/authentication.module';
     DatabaseModule,
     AuthenticationModule,
     UsersModule,
+    LichessStrategyModule,
+    PassportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

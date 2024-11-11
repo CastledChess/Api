@@ -4,6 +4,7 @@ services:
     # On utilise l'image du Dockerfile.
     build: .
     container_name: castled-api
+    entrypoint: ["./wait-for-it.sh", "castled-postgres", "5432", "--", "npm", "start"]
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules

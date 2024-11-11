@@ -43,17 +43,4 @@ export class AuthenticationController {
   async signUp(@Body() createUserDto: CreateUserDto): Promise<AuthenticationResponseDto> {
     return this.authService.register(createUserDto);
   }
-
-  /**
-   * Connecte un utilisateur via Lichess.
-   * @returns Les informations de l'utilisateur sur Lichess.
-   * @throws UnauthorizedException si le token est manquant ou invalide.
-   */
-  @ApiOperation({ summary: 'Connexion via Lichess' })
-  @ApiResponse({ status: 200, description: 'Connexion réussie avec Lichess.' })
-  @ApiResponse({ status: 401, description: "Erreur d'authentification avec Lichess." })
-  @Post('lichess/login')
-  async lichessLogin(): Promise<User> {
-    return this.authService.lichessLogin();
-  }
 }

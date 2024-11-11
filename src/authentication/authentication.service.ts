@@ -71,27 +71,4 @@ export class AuthenticationService {
   private generateLoginResponseDto(accessToken: string, refreshToken: string, user: User): AuthenticationResponseDto {
     return new AuthenticationResponseDto(accessToken, refreshToken, this.generateUserDto(user));
   }
-
-  /**
-   * Connecte un utilisateur avec Lichess.
-   * @returns Les informations de l'utilisateur sur Lichess.
-   * @throws UnauthorizedException si les informations de connexion sont invalides.
-   */
-  async lichessLogin(): Promise<User> {
-    if (!this.lichessToken) {
-      throw new UnauthorizedException('Le token Lichess est manquant');
-    }
-
-    try {
-      const headers = {
-        Authorization: `Bearer ${this.lichessToken}`,
-      };
-
-      const response = await this.httpService.get('https://lichess.org/api/account', { headers }).toPromise();
-
-      return response.data;
-    } catch (error) {
-      throw new UnauthorizedException("Erreur d'authentification avec Lichess", error.message);
-    }
-  }
 }
