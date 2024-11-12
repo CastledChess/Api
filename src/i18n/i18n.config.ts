@@ -8,5 +8,8 @@ export const i18nConfig: I18nOptions = {
     watch: true,
   },
   resolvers: [{ use: QueryResolver, options: ['lang'] }, AcceptLanguageResolver],
-  typesOutputPath: join(process.cwd(), 'src/generated/i18n.generated.ts'),
+  typesOutputPath:
+    process.env.NODE_ENV === 'production'
+      ? '/tmp/generated/i18n.generated.ts'
+      : join(process.cwd(), 'src/generated/i18n.generated.ts'),
 };
