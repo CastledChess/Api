@@ -4,9 +4,12 @@ import { AcceptLanguageResolver, I18nOptions, QueryResolver } from 'nestjs-i18n'
 export const i18nConfig: I18nOptions = {
   fallbackLanguage: 'fr',
   loaderOptions: {
-    path: join(__dirname, '../i18n'),
+    path: join(process.cwd(), 'src/i18n'),
     watch: true,
   },
   resolvers: [{ use: QueryResolver, options: ['lang'] }, AcceptLanguageResolver],
-  typesOutputPath: join(__dirname, '../../../src/generated/i18n.generated.ts'),
+  typesOutputPath:
+    process.env.NODE_ENV === 'production'
+      ? '/tmp/generated/i18n.generated.ts'
+      : join(process.cwd(), 'src/generated/i18n.generated.ts'),
 };
