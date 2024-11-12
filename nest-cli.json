@@ -13,7 +13,7 @@
       {
         "include": "generated/i18n.generated.ts",
         "watchAssets": true,
-        "outDir": "dist/src/generated"
+        "outDir": "dist/src/"
       }
     ]
   }
