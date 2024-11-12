@@ -9,6 +9,11 @@
         "include": "i18n/**/*",
         "watchAssets": true,
         "outDir": "dist/src"
+      },
+      {
+        "include": "generated/i18n.generated.ts",
+        "watchAssets": true,
+        "outDir": "dist/src/generated"
       }
     ]
   }
