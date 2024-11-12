@@ -22,8 +22,12 @@ async function bootstrap() {
   // Si la version majeure de l'API est 0, on le définit à 1 sinon on garde la version actuelle
   app.setGlobalPrefix('api/' + (apiMajorVersion === '0' ? 'v1' : 'v' + apiMajorVersion));
   // Ajout de la configuration Swagger à l'application
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api/docs', app, document);
+
+  if (process.env.NODE_ENV === 'development') {
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('api/docs', app, document);
+  }
+
   await app.listen(3000);
 }
 
