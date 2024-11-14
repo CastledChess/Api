@@ -6,7 +6,7 @@ on:
       - develop
       - staging
       - main
-      - devops/ci
+      - devops/ci # FOR TESTS
   pull_request:
     branches:
       - develop
