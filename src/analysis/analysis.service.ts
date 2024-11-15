@@ -7,6 +7,7 @@ import { InfoResult } from './entities/info-result.entity';
 import { Move } from './entities/move.entity';
 import { CreateAnalysisDto } from './dto/request/create-analysis.dto';
 import { User } from '../users/user.entity';
+import { paginate, Pagination, IPaginationOptions } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class AnalysisService {
@@ -60,6 +61,12 @@ export class AnalysisService {
     }
 
     return analysis;
+  }
+
+  async findAllByUserId(userId: string, options: IPaginationOptions): Promise<Pagination<Analysis>> {
+    return paginate<Analysis>(this.analysisRepository, options, {
+      where: { user: { id: userId } },
+    });
   }
 
   private async findOneByPgnAndUserId(pgn: string, userId: string): Promise<Analysis> {
