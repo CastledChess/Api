@@ -1,7 +1,7 @@
 import { ExecutionContext, HttpException, HttpStatus, Injectable, ValidationError } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { LoginRequestDto } from './dto/request/login-request.dto';
 
@@ -15,7 +15,7 @@ export class LocalAuthGuard extends AuthGuard('local') {
     const request: Request = context.switchToHttp().getRequest<Request>();
 
     // Transforme le corps de la requête en objet de type LoginRequestDto
-    const body: LoginRequestDto = plainToClass(LoginRequestDto, request.body);
+    const body: LoginRequestDto = plainToInstance(LoginRequestDto, request.body);
 
     // Valide les informations de connexion
     const errors: ValidationError[] = await validate(body);

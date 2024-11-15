@@ -48,12 +48,12 @@ export class AuthenticationService {
   }
 
   private generateJwtToken(user: User): string {
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id, username: user.username };
     return this.jwtService.sign(payload);
   }
 
   private generateRefreshToken(user: User): string {
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id, username: user.username };
     return this.jwtService.sign(payload, { expiresIn: '7d' });
   }
 
