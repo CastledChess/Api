@@ -21,6 +21,7 @@ export class AnalysisService {
     private readonly moveRepository: Repository<Move>,
   ) {}
 
+  // TODO: Il faut refactoriser cette méthode pour qu'elle soit plus lisible et utiliser des transactions
   async create(createAnalysisDto: CreateAnalysisDto, user: User): Promise<Analysis> {
     if (await this.findOneByPgnAndUserId(createAnalysisDto.pgn, user.id)) {
       throw new ConflictException('Analysis already exists');
@@ -28,13 +29,17 @@ export class AnalysisService {
 
     const { pgn, variants, header, moves } = createAnalysisDto;
 
+    // Création de l'analyse
     const analysis: Analysis = this.analysisRepository.create({ pgn, variants, header, user });
     await this.analysisRepository.save(analysis);
 
+    // Pour chaque coup de l'analyse
     for (const moveDto of moves) {
+      // Création du coup
       const move = this.moveRepository.create(moveDto.move);
       await this.moveRepository.save(move);
 
+      // Création du coup d'analyse pour le coup
       const analysisMove = this.analysisMoveRepository.create({
         move,
         fen: moveDto.fen,
@@ -43,7 +48,9 @@ export class AnalysisService {
       });
       await this.analysisMoveRepository.save(analysisMove);
 
+      // Pour chaque résultat moteur du coup d'analyse
       for (const engineResultDto of moveDto.engineResults) {
+        // Création du résultat moteur pour le coup d'analyse
         const engineResult = this.infoResultRepository.create({
           ...engineResultDto,
           analysisMove,
