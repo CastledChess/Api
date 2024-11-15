@@ -1,13 +1,12 @@
-import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, Unique } from 'typeorm';
 import { AnalysisMove } from './analysis-move.entity';
+import { CustomBaseEntity } from '../../common/entities/custom-base.entity';
+import { User } from '../../users/user.entity';
 
 @Entity('analysis')
-@Unique(['pgn'])
-@Index(['pgn'])
-export class Analysis {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+@Unique(['pgn', 'user'])
+@Index(['pgn', 'user'])
+export class Analysis extends CustomBaseEntity {
   @Column()
   pgn: string;
 
@@ -20,5 +19,10 @@ export class Analysis {
   @OneToMany(() => AnalysisMove, (analysisMove) => analysisMove.analysis, {
     cascade: true,
   })
+  @JoinColumn({ name: 'move_id' })
   moves: AnalysisMove[];
+
+  @ManyToOne(() => User, (user) => user.analyses, { nullable: false })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }

@@ -1,27 +1,25 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { AnalysisMove } from './analysis-move.entity';
+import { CustomBaseEntity } from '../../common/entities/custom-base.entity';
 
 @Entity('info_results')
-export class InfoResult {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class InfoResult extends CustomBaseEntity {
   @Column()
   type: 'info';
 
   @Column({ nullable: true })
   depth?: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'sel_depth' })
   selDepth?: number;
 
   @Column({ nullable: true, type: 'float' })
   eval?: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'centi_pawns' })
   centiPawns?: number;
 
-  @Column({ nullable: true, type: 'float' })
+  @Column({ nullable: true, type: 'float', name: 'win_chance' })
   winChance?: number;
 
   @Column({ nullable: true, type: 'float' })
@@ -40,5 +38,6 @@ export class InfoResult {
   pv: string[];
 
   @ManyToOne(() => AnalysisMove, (analysisMove) => analysisMove.engineResults)
+  @JoinColumn({ name: 'analysis_move_id' })
   analysisMove: AnalysisMove;
 }

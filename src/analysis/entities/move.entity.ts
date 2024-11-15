@@ -1,27 +1,48 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { SquareEnum } from '../enums/square.enum';
+import { PieceSymbolEnum } from '../enums/piece-symbol.enum';
+import { ColorEnum } from '../enums/color.enum';
+import { CustomBaseEntity } from '../../common/entities/custom-base.entity';
 
 @Entity('moves')
-export class Move {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class Move extends CustomBaseEntity {
+  @Column({
+    type: 'enum',
+    enum: ColorEnum,
+  })
+  color: ColorEnum;
 
-  @Column()
-  color: ColorType;
+  @Column({
+    type: 'enum',
+    enum: SquareEnum,
+  })
+  from: SquareEnum;
 
-  @Column()
-  from: SquareType;
+  @Column({
+    type: 'enum',
+    enum: SquareEnum,
+  })
+  to: SquareEnum;
 
-  @Column()
-  to: SquareType;
+  @Column({
+    type: 'enum',
+    enum: PieceSymbolEnum,
+  })
+  piece: PieceSymbolEnum;
 
-  @Column()
-  piece: PieceSymbolType;
+  @Column({
+    type: 'enum',
+    enum: PieceSymbolEnum,
+    nullable: true,
+  })
+  captured?: PieceSymbolEnum;
 
-  @Column({ nullable: true })
-  captured?: PieceSymbolType;
-
-  @Column({ nullable: true })
-  promotion?: PieceSymbolType;
+  @Column({
+    type: 'enum',
+    enum: PieceSymbolEnum,
+    nullable: true,
+  })
+  promotion?: PieceSymbolEnum;
 
   @Column()
   flags: string;
