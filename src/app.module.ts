@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { AnalysisModule } from './analysis/analysis.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
     I18nModule.forRoot(i18nConfig),
     AuthenticationModule,
     UsersModule,
+    AnalysisModule,
   ],
   controllers: [AppController],
   providers: [AppService],
