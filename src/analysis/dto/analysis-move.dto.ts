@@ -28,5 +28,5 @@ export class AnalysisMoveDto {
   @ApiProperty({ description: 'La classification du coup analysé', enum: AnalysisMoveClassificationEnum })
   @IsOptional()
   @IsEnum(AnalysisMoveClassificationEnum)
-  classification?: AnalysisMoveClassificationEnum;
+  classification?: typeof AnalysisMoveClassificationEnum;
 }

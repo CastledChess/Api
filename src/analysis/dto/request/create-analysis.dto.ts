@@ -48,7 +48,7 @@ export class CreateAnalysisDto {
           color: 'w',
           from: 'e2',
           to: 'e4',
-          piece: 'P',
+          piece: 'p',
           flags: 'n',
           san: 'e4',
           lan: 'e2e4',
