@@ -36,17 +36,14 @@ export class LichessStrategyController {
   }
 
   @Get('callback')
-  async callback(
-    @Query('grant_type') grantType: string,
-    @Query('code') code: string,
-    @Query('code_verifier') codeVerifier: string,
-    @Query('redirect_uri') redirectUri: string,
-    @Query('client_id') clientId: string,
-    @Res() res: Response,
-  ) {
+  async callback(@Query('code') code: string, @Res() res: Response) {
     try {
+      const clientId = this.configService.get('LICHESS_CLIENT_ID');
+      const redirectUri = this.configService.get('LICHESS_REDIRECT_URI');
+      const codeVerifier = this.configService.get('LICHESS_CODE_VERIFIER');
+
       const accessToken = await this.lichessStrategyService.getLichessAccessToken(
-        grantType,
+        'authorization_code',
         code,
         redirectUri,
         clientId,
@@ -58,7 +55,7 @@ export class LichessStrategyController {
       return res.redirect(`${redUri}?token=${accessToken}`);
     } catch (error) {
       console.error('Erreur lors de la récupération du token:', error);
-      return res.redirect(`${redirectUri}?error=authentication_failed`);
+      return res.redirect(`http://localhost:3000/api/v1?error=authentication_failed`);
     }
   }
 }

@@ -17,16 +17,15 @@ export class LichessStrategyService {
     clientId: string,
     codeVerifier: string,
   ): Promise<string> {
-    const response = await this.httpService
-      .post('https://lichess.org/api/token', {
-        grant_type: grantType,
-        code: code,
-        code_verifier: codeVerifier,
-        redirect_uri: redirectUri,
-        client_id: clientId,
-      })
-      .toPromise();
+    const response$ = await this.httpService.post('https://lichess.org/api/token', {
+      grant_type: grantType,
+      code: code,
+      code_verifier: codeVerifier,
+      redirect_uri: redirectUri,
+      client_id: clientId,
+    });
 
+    const response = await lastValueFrom(response$);
     return response.data.access_token;
   }
 
