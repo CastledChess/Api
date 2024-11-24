@@ -1,5 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { DATABASE_TYPE } from '../common/constants';
+import { DATABASE_TYPE } from './database.constants';
 
 export const getDatabaseConfig = (): TypeOrmModuleOptions => ({
   type: DATABASE_TYPE,
