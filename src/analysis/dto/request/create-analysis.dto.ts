@@ -1,5 +1,5 @@
 import { IsArray, IsNotEmpty, IsNumber, IsObject, IsString, ValidateNested } from 'class-validator';
-import { AnalysisMoveDto } from '../analysis-move.dto';
+import { AnalysisMoveResponseDto } from '../response/analysis-move-response.dto';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -77,7 +77,7 @@ export class CreateAnalysisDto {
   })
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => AnalysisMoveDto)
+  @Type(() => AnalysisMoveResponseDto)
   @IsNotEmpty()
-  moves: AnalysisMoveDto[];
+  moves: AnalysisMoveResponseDto[];
 }

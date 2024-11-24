@@ -4,8 +4,8 @@ import { CustomBaseEntity } from '../../common/entities/custom-base.entity';
 import { User } from '../../users/user.entity';
 
 @Entity('analysis')
-@Unique(['pgn', 'user'])
-@Index(['pgn', 'user'])
+@Unique(['pgn', 'user', 'deletedAt'])
+@Index(['pgn', 'user', 'deletedAt'])
 export class Analysis extends CustomBaseEntity {
   @Column()
   pgn: string;

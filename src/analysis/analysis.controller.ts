@@ -1,11 +1,25 @@
-import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AnalysisService } from './analysis.service';
 import { CreateAnalysisDto } from './dto/request/create-analysis.dto';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../authentication/jwt-auth.guard';
 import { User } from '../users/user.entity';
 import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 import { Analysis } from './entities/analysis.entity';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../common/constants/app.constant';
+import { AnalysisResponseDto } from './dto/response/analysis-response.dto';
 
 @ApiBearerAuth('access-token')
 @Controller('analysis')
@@ -24,15 +38,74 @@ export class AnalysisController {
     return this.analysisService.create(createAnalysisDto, request.user);
   }
 
-  @ApiOperation({ summary: 'Get analyses with pagination and sorting' })
-  @ApiResponse({ status: 200, description: 'Analyses retrieved successfully.' })
+  @ApiOperation({ summary: "Récupération des analyses de l'utilisateur connecté" })
+  @ApiResponse({ status: 200, description: "Liste des analyses de l'utilisateur connecté." })
+  @ApiQuery({ name: 'page', required: true, schema: { default: DEFAULT_PAGE } })
+  @ApiQuery({ name: 'limit', required: true, schema: { default: DEFAULT_PAGE_SIZE } })
   @Get()
-  async findAllByUserId(
+  async findPaginatedByUserId(
     @Req() request: Request & { user: User },
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('page') page: number = DEFAULT_PAGE,
+    @Query('limit') limit: number = DEFAULT_PAGE_SIZE,
   ): Promise<Pagination<Analysis>> {
     const options: IPaginationOptions = { page, limit };
     return this.analysisService.findAllByUserId(request.user.id, options);
+  }
+
+  @ApiOperation({ summary: "Récupération d'une analyse avec ses coups par ID" })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: "ID de l'analyse",
+    type: String,
+  })
+  @ApiResponse({
+    status: 200,
+    description: "Tous les détails de l'analyse",
+    type: AnalysisResponseDto,
+  })
+  @ApiResponse({ status: 403, description: 'Vous ne pouvez pas accéder à cette analyse.' })
+  @ApiResponse({ status: 404, description: 'Analyse non trouvée.' })
+  @Get(':id')
+  async findOneById(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() request: Request & { user: User },
+  ): Promise<AnalysisResponseDto> {
+    return this.analysisService.findOneById(id, request.user);
+  }
+
+  @ApiOperation({ summary: "Suppression d'une analyse par ID" })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: "ID de l'analyse",
+    type: String,
+  })
+  @ApiResponse({ status: 204, description: 'Analyse supprimée.' })
+  @ApiResponse({ status: 403, description: 'Vous ne pouvez pas supprimer cette analyse.' })
+  @ApiResponse({ status: 404, description: 'Analyse non trouvée.' })
+  @Delete(':id/delete')
+  @HttpCode(204)
+  async deleteOneById(@Param('id', ParseUUIDPipe) id: string, @Req() request: Request & { user: User }): Promise<void> {
+    return this.analysisService.deleteOneById(id, request.user);
+  }
+
+  @ApiOperation({ summary: 'Restaurer une analyse par ID' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: "ID de l'analyse",
+    type: String,
+  })
+  @ApiResponse({ status: 204, description: 'Analyse restaurée.' })
+  @ApiResponse({ status: 403, description: 'Vous ne pouvez pas restaurer cette analyse.' })
+  @ApiResponse({ status: 404, description: 'Analyse non trouvée.' })
+  @Post(':id/restore')
+  @HttpCode(204)
+  async restoreOneById(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() request: Request & { user: User },
+  ): Promise<void> {
+    return this.analysisService.restoreOneById(id, request.user);
   }
 }
