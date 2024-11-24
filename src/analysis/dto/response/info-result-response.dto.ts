@@ -1,7 +1,9 @@
 import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { InfoResult } from '../../entities/info-result.entity';
+import { BaseDto } from '../../../common/dto/base.dto';
 
-export class InfoResultDto {
+export class InfoResultResponseDto extends BaseDto {
   @ApiProperty({ description: 'Le type de résultat', example: 'info' })
   @IsString()
   type: 'info';
@@ -55,4 +57,25 @@ export class InfoResultDto {
   @IsArray()
   @IsString({ each: true })
   pv: string[];
+
+  static fromEntity(infoResult: InfoResult): InfoResultResponseDto {
+    const response = new InfoResultResponseDto();
+    response.id = infoResult.id;
+    response.type = infoResult.type;
+    response.depth = infoResult.depth;
+    response.selDepth = infoResult.selDepth;
+    response.eval = infoResult.eval;
+    response.centiPawns = infoResult.centiPawns;
+    response.winChance = infoResult.winChance;
+    response.mate = infoResult.mate;
+    response.move = infoResult.move;
+    response.from = infoResult.from;
+    response.to = infoResult.to;
+    response.pv = infoResult.pv;
+    response.createdAt = infoResult.createdAt;
+    response.updatedAt = infoResult.updatedAt;
+    response.deletedAt = infoResult.deletedAt;
+
+    return response;
+  }
 }

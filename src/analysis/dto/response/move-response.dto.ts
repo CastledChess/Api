@@ -1,10 +1,12 @@
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { PieceSymbolEnum } from '../enums/piece-symbol.enum';
-import { SquareEnum } from '../enums/square.enum';
-import { ColorEnum } from '../enums/color.enum';
+import { PieceSymbolEnum } from '../../enums/piece-symbol.enum';
+import { SquareEnum } from '../../enums/square.enum';
+import { ColorEnum } from '../../enums/color.enum';
+import { BaseDto } from '../../../common/dto/base.dto';
+import { Move } from '../../entities/move.entity';
 
-export class MoveDto {
+export class MoveResponseDto extends BaseDto {
   @ApiProperty({ description: 'La couleur du joueur qui a joué le coup', example: 'w' })
   @IsString()
   @IsNotEmpty()
@@ -59,4 +61,25 @@ export class MoveDto {
   @IsString()
   @IsNotEmpty()
   after: string;
+
+  static fromEntity(move: Move): MoveResponseDto {
+    const response = new MoveResponseDto();
+    response.id = move.id;
+    response.color = move.color;
+    response.from = move.from;
+    response.to = move.to;
+    response.piece = move.piece;
+    response.captured = move.captured;
+    response.promotion = move.promotion;
+    response.flags = move.flags;
+    response.san = move.san;
+    response.lan = move.lan;
+    response.before = move.before;
+    response.after = move.after;
+    response.createdAt = move.createdAt;
+    response.updatedAt = move.updatedAt;
+    response.deletedAt = move.deletedAt;
+
+    return response;
+  }
 }
