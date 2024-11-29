@@ -8,6 +8,8 @@ import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { AnalysisModule } from './analysis/analysis.module';
+import { MovesModule } from './moves/moves.module';
+import { InfoResultsModule } from './info-results/info-results.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { AnalysisModule } from './analysis/analysis.module';
     AuthenticationModule,
     UsersModule,
     AnalysisModule,
+    InfoResultsModule,
+    MovesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

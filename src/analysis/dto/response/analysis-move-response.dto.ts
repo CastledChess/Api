@@ -8,7 +8,7 @@ import { BaseDto } from '../../../common/dto/base.dto';
 import { AnalysisMove } from '../../entities/analysis-move.entity';
 
 export class AnalysisMoveResponseDto extends BaseDto {
-  @ApiProperty({ description: 'Le coup ' })
+  @ApiProperty({ description: 'Le coup' })
   @ValidateNested()
   @Type(() => MoveResponseDto)
   move: MoveResponseDto;
