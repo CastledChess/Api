@@ -1,6 +1,6 @@
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, EntityManager, DataSource } from 'typeorm';
 import { Analysis } from './entities/analysis.entity';
 import { AnalysisMove } from './entities/analysis-move.entity';
 import { InfoResult } from './entities/info-result.entity';
@@ -9,6 +9,7 @@ import { CreateAnalysisDto } from './dto/request/create-analysis.dto';
 import { User } from '../users/user.entity';
 import { paginate, Pagination, IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { AnalysisResponseDto } from './dto/response/analysis-response.dto';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class AnalysisService {
@@ -21,47 +22,25 @@ export class AnalysisService {
     private readonly infoResultRepository: Repository<InfoResult>,
     @InjectRepository(Move)
     private readonly moveRepository: Repository<Move>,
+    private readonly dataSource: DataSource,
+    private readonly i18n: I18nService,
   ) {}
 
-  // TODO: Il faut refactoriser cette méthode pour qu'elle soit plus lisible et utiliser des transactions
   async create(createAnalysisDto: CreateAnalysisDto, user: User): Promise<Analysis> {
-    if (await this.findOneByPgnAndUserId(createAnalysisDto.pgn, user.id)) {
-      throw new ConflictException('Analyse déjà existante');
-    }
+    // Vérification de l'unicité
+    await this.validateUniqueAnalysis(createAnalysisDto.pgn, user.id);
 
-    const { pgn, variants, header, moves } = createAnalysisDto;
+    // Utilisation d'une transaction pour garantir l'intégrité des données
+    // Optimisation : Utilisation d'une transaction pour éviter les appels multiples à la base de données
+    return await this.dataSource.transaction(async (transactionalEntityManager) => {
+      // Création de l'analyse
+      const analysis = await this.createAnalysisEntity(createAnalysisDto, user, transactionalEntityManager);
 
-    // Création de l'analyse
-    const analysis: Analysis = this.analysisRepository.create({ pgn, variants, header, user });
-    await this.analysisRepository.save(analysis);
+      // Création des coups et résultats associés
+      await this.createMovesWithResults(createAnalysisDto.moves, analysis, transactionalEntityManager);
 
-    // Pour chaque coup de l'analyse
-    for (const moveDto of moves) {
-      // Création du coup
-      const move = this.moveRepository.create(moveDto.move);
-      await this.moveRepository.save(move);
-
-      // Création du coup d'analyse pour le coup
-      const analysisMove = this.analysisMoveRepository.create({
-        move,
-        fen: moveDto.fen,
-        classification: moveDto.classification,
-        analysis,
-      });
-      await this.analysisMoveRepository.save(analysisMove);
-
-      // Pour chaque résultat moteur du coup d'analyse
-      for (const engineResultDto of moveDto.engineResults) {
-        // Création du résultat moteur pour le coup d'analyse
-        const engineResult = this.infoResultRepository.create({
-          ...engineResultDto,
-          analysisMove,
-        });
-        await this.infoResultRepository.save(engineResult);
-      }
-    }
-
-    return analysis;
+      return analysis;
+    });
   }
 
   async findAllByUserId(userId: string, options: IPaginationOptions): Promise<Pagination<Analysis>> {
@@ -146,6 +125,60 @@ export class AnalysisService {
     return this.analysisRepository.findOne({
       where: { pgn, user: { id: userId }, deletedAt: null },
     });
+  }
+
+  private async validateUniqueAnalysis(pgn: string, userId: string): Promise<void> {
+    const existingAnalysis = await this.findOneByPgnAndUserId(pgn, userId);
+    if (existingAnalysis) {
+      throw new ConflictException(
+        this.i18n.translate('common.ERRORS.ALREADY_EXISTS', { args: { property: 'Analyse' } }),
+      );
+    }
+  }
+
+  private async createAnalysisEntity(
+    createAnalysisDto: CreateAnalysisDto,
+    user: User,
+    manager: EntityManager,
+  ): Promise<Analysis> {
+    // Création de l'analyse
+    const analysis = this.analysisRepository.create({
+      pgn: createAnalysisDto.pgn,
+      variants: createAnalysisDto.variants,
+      header: createAnalysisDto.header,
+      user,
+    });
+    return await manager.save(Analysis, analysis);
+  }
+
+  private async createMovesWithResults(
+    movesDto: CreateAnalysisDto['moves'],
+    analysis: Analysis,
+    manager: EntityManager,
+  ): Promise<void> {
+    for (const moveDto of movesDto) {
+      // Création du coup
+      const move = this.moveRepository.create(moveDto.move);
+      await manager.save(Move, move);
+
+      // Création du coup d'analyse
+      const analysisMove = this.analysisMoveRepository.create({
+        move,
+        fen: moveDto.fen,
+        classification: moveDto.classification,
+        analysis,
+      });
+      await manager.save(AnalysisMove, analysisMove);
+
+      // Création des engine results en lot
+      const engineResults = moveDto.engineResults.map((resultDto) =>
+        this.infoResultRepository.create({
+          ...resultDto,
+          analysisMove,
+        }),
+      );
+      await manager.save(InfoResult, engineResults);
+    }
   }
 
   private async findOneByPgnAndUserId(pgn: string, userId: string): Promise<Analysis> {

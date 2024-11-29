@@ -1,5 +1,8 @@
 {
   "greetings": {
     "hello": "Hello"
+  },
+  "ERRORS": {
+    "ALREADY_EXISTS": "{property} already exists"
   }
 }
