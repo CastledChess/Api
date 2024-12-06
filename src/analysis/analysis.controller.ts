@@ -18,7 +18,7 @@ import { JwtAuthGuard } from '../authentication/jwt-auth.guard';
 import { User } from '../users/entities/user.entity';
 import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 import { Analysis } from './entities/analysis.entity';
-import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../common/constants/app.constant';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../common/constants';
 import { AnalysisResponseDto } from './dto/response/analysis-response.dto';
 
 @ApiBearerAuth('access-token')

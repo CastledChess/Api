@@ -40,7 +40,7 @@ export class AuthenticationService {
   }
 
   async validateUser(loginDto: LoginRequestDto): Promise<User> {
-    const user: User = await this.usersService.findOne(loginDto.email);
+    const user: User = await this.usersService.findOneByEmail(loginDto.email);
     if (!user || !(await bcrypt.compare(loginDto.password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -57,11 +57,8 @@ export class AuthenticationService {
     return this.jwtService.sign(payload, { expiresIn: '7d' });
   }
 
-  private generateUserDto(user: User): UserDto {
-    return new UserDto(user.id, user.email, user.username);
-  }
-
   private generateLoginResponseDto(accessToken: string, refreshToken: string, user: User): AuthenticationResponseDto {
-    return new AuthenticationResponseDto(accessToken, refreshToken, this.generateUserDto(user));
+    const userDto = new UserDto(user);
+    return new AuthenticationResponseDto(accessToken, refreshToken, userDto);
   }
 }
