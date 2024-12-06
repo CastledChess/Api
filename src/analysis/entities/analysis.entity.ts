@@ -1,7 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, Unique } from 'typeorm';
 import { AnalysisMove } from './analysis-move.entity';
 import { CustomBaseEntity } from '../../common/entities/custom-base.entity';
-import { User } from '../../users/user.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity('analysis')
 @Unique(['pgn', 'user', 'deletedAt'])
