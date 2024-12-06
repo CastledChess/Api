@@ -17,6 +17,7 @@ import { InfoResultsModule } from './info-results/info-results.module';
       isGlobal: true,
       // Si vous modifiez le fichier .env, vous devrez redémarrer le serveur
       cache: true, // Pour éviter de lire le fichier à chaque fois
+      expandVariables: true, // Pour utiliser les variables d'environnement dans le fichier .env
     }),
     DatabaseModule,
     I18nModule.forRoot(i18nConfig),
