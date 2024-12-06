@@ -1,45 +1,73 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { HttpService } from '@nestjs/axios';
-import { lastValueFrom } from 'rxjs';
+import { Injectable } from '@nestjs/common';
+import fetch from 'node-fetch';
+
+interface LichessTokenResponse {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  scope: string;
+  refresh_token?: string;
+}
 
 @Injectable()
 export class LichessStrategyService {
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly httpService: HttpService,
-  ) {}
-
   async getLichessAccessToken(
     grantType: string,
     code: string,
     redirectUri: string,
     clientId: string,
     codeVerifier: string,
-  ): Promise<string> {
-    const response$ = await this.httpService.post('https://lichess.org/api/token', {
-      grant_type: grantType,
-      code: code,
-      code_verifier: codeVerifier,
-      redirect_uri: redirectUri,
-      client_id: clientId,
+  ): Promise<LichessTokenResponse> {
+    try {
+      const response = await fetch('https://lichess.org/api/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          grant_type: grantType,
+          code,
+          redirect_uri: redirectUri,
+          client_id: clientId,
+          code_verifier: codeVerifier,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Lichess API error:', errorData);
+        throw new Error(`Lichess API error: ${response.status} ${errorData}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.access_token) {
+        throw new Error('No access token in response');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Detailed error:', error);
+      throw error;
+    }
+  }
+
+  async getLichessUser(accessToken: string) {
+    if (!accessToken) {
+      throw new Error('Access token is required');
+    }
+    const response = await fetch('https://lichess.org/api/account', {
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    const response = await lastValueFrom(response$);
-    return response.data.access_token;
+    return response.json();
   }
 
   async revokeLichessAccessToken(token: string): Promise<boolean> {
-    try {
-      const response$ = this.httpService.delete('https://lichess.org/api/token', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    const response = await fetch('https://lichess.org/api/token/revoke', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `token=${token}`,
+    });
 
-      await lastValueFrom(response$);
-      return true;
-    } catch (error) {
-      console.error('Erreur lors de la révocation du token Lichess:', error);
-      throw new HttpException('Echec de révocation du Token', HttpStatus.BAD_REQUEST);
-    }
+    return response.ok;
   }
 }
