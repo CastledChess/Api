@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Analysis } from './entities/analysis.entity';
 import { CreateAnalysisDto } from './dto/request/create-analysis.dto';
-import { User } from '../users/user.entity';
+import { User } from '../users/entities/user.entity';
 import { paginate, Pagination, IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { AnalysisResponseDto } from './dto/response/analysis-response.dto';
 import { I18nService } from 'nestjs-i18n';

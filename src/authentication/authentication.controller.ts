@@ -3,7 +3,7 @@ import { AuthenticationService } from './authentication.service';
 import { LoginRequestDto } from './dto/request/login-request.dto';
 import { CreateUserDto } from './dto/request/create-user.dto';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { User } from '../users/user.entity';
+import { User } from '../users/entities/user.entity';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthenticationResponseDto } from './dto/response/authentication-response.dto';
 
