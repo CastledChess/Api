@@ -14,7 +14,7 @@ export class AuthenticationController {
   /**
    * Connecte un utilisateur.
    * @param loginDto les informations de connexion de l'utilisateur.
-   * @returns un access token.
+   * @returns Un access token et un refresh token avec les informations de l'utilisateur.
    * @throws UnauthorizedException si les informations de connexion sont invalides.
    */
   @ApiOperation({ summary: "Connexion de l'utilisateur" })
@@ -44,5 +44,20 @@ export class AuthenticationController {
   @Post('register')
   async signUp(@Body() createUserDto: CreateUserDto): Promise<AuthenticationResponseDto> {
     return this.authService.register(createUserDto);
+  }
+
+  /**
+   * Rafraîchit le token d'authentification.
+   * @param refreshToken le token de rafraîchissement.
+   * @returns un access token et un refresh token avec les informations de l'utilisateur.
+   */
+  @ApiOperation({ summary: "Rafraîchissement du token d'authentification" })
+  @ApiBody({ type: String })
+  @ApiResponse({ status: 200, description: 'Token rafraîchi.' })
+  @ApiResponse({ status: 401, description: 'Token invalide.' })
+  @ApiResponse({ status: 400, description: 'Requête invalide.' })
+  @Post('refresh')
+  async register(refreshToken: string): Promise<AuthenticationResponseDto> {
+    return this.authService.refresh(refreshToken);
   }
 }
