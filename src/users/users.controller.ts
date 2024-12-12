@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseUUIDPipe, ValidationPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseUUIDPipe, ValidationPipe, UseGuards, NotFoundException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { I18nService } from 'nestjs-i18n';
@@ -63,6 +63,9 @@ export class UsersController {
     { email }: GetUserByEmailDto,
   ): Promise<UserDto> {
     const user = await this.usersService.findOneByEmail(email);
+    if (!user) {
+      throw new NotFoundException(this.i18n.translate('user.errors.notFound'));
+    }
     return new UserDto(user);
   }
 

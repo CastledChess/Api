@@ -1,5 +1,6 @@
 {
   "errors": {
-    "alreadyExists": "User already exists"
+    "alreadyExists": "User already exists",
+    "notFound": "User not found"
   }
 }
