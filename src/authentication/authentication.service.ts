@@ -47,6 +47,15 @@ export class AuthenticationService {
     return user;
   }
 
+  async refresh(refreshToken: string): Promise<AuthenticationResponseDto> {
+    const decoded = this.jwtService.decode(refreshToken) as { email: string };
+    const user: User = await this.usersService.findOneByEmail(decoded.email);
+    if (!user) {
+      throw new UnauthorizedException('Invalid token');
+    }
+    return this.login(user);
+  }
+
   private generateJwtToken(user: User): string {
     const payload = { email: user.email, sub: user.id, username: user.username };
     return this.jwtService.sign(payload);
