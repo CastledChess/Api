@@ -49,7 +49,7 @@ export class UsersService {
    * @returns L'utilisateur correspondant.
    * @throws BadRequestException si l'email n'est pas fourni.
    */
-  async findOneByEmail(email: string): Promise<User> {
+  async findOneByEmail(email: string): Promise<User | null> {
     if (!email) {
       this.logger.error("Email requis pour la recherche de l'utilisateur.");
       throw new BadRequestException("L'email est requis pour la recherche de l'utilisateur.");
@@ -59,7 +59,7 @@ export class UsersService {
 
     if (!user) {
       this.logger.warn(`Aucun utilisateur trouvé avec l'email ${email}`);
-      throw new NotFoundException('Aucun utilisateur trouvé avec cet email.');
+      return null;
     }
     this.logger.debug(`Utilisateur trouvé avec l'email ${email}`);
 
