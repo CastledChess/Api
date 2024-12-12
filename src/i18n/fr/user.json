@@ -1,5 +1,6 @@
 {
   "errors": {
-    "alreadyExists": "L'utilisateur existe déjà"
+    "alreadyExists": "L'utilisateur existe déjà",
+    "notFound": "L'utilisateur n'existe pas"
   }
 }
