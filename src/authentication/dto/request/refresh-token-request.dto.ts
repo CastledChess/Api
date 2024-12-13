@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class RefreshTokenRequest {
+export class RefreshTokenRequestDto {
   /**
    * Le token de rafraîchissement.
    */
