@@ -27,6 +27,9 @@ export class AnalysisMove extends CustomBaseEntity {
   })
   classification?: typeof AnalysisMoveClassificationEnum;
 
+  @Column()
+  order: number;
+
   @ManyToOne(() => Analysis, (analysis) => analysis.moves, {
     onDelete: 'CASCADE', // Supprime les coups d'analyse associés lors de la suppression de l'analyse
   })
