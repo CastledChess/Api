@@ -32,6 +32,8 @@ export class MovesService {
     manager: EntityManager,
   ): Promise<void> {
     for (const analysisMoveDto of analysisMovesDto) {
+      const order: number = analysisMovesDto.findIndex((move) => move === analysisMoveDto);
+
       // Création du move
       const move = plainToClass(Move, analysisMoveDto.move as MoveResponseDto);
       await this.createMove(move);
@@ -42,6 +44,9 @@ export class MovesService {
         fen: analysisMoveDto.fen,
         classification: analysisMoveDto.classification,
         analysis,
+        // L'ordre du coup dans l'analyse
+        // On ajoute 1, car les index commencent à : 0
+        order: order + 1,
       });
       await manager.save(AnalysisMove, analysisMove);
 

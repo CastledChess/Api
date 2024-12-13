@@ -3,10 +3,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { PieceSymbolEnum } from '../../enums/piece-symbol.enum';
 import { SquareEnum } from '../../enums/square.enum';
 import { ColorEnum } from '../../enums/color.enum';
-import { BaseDto } from '../../../common/dto/base.dto';
 import { Move } from '../../entities/move.entity';
 
-export class MoveResponseDto extends BaseDto {
+export class MoveResponseDto {
   @ApiProperty({ description: 'La couleur du joueur qui a joué le coup', example: 'w' })
   @IsString()
   @IsNotEmpty()
@@ -64,7 +63,6 @@ export class MoveResponseDto extends BaseDto {
 
   static fromEntity(move: Move): MoveResponseDto {
     const response = new MoveResponseDto();
-    response.id = move.id;
     response.color = move.color;
     response.from = move.from;
     response.to = move.to;
@@ -76,9 +74,6 @@ export class MoveResponseDto extends BaseDto {
     response.lan = move.lan;
     response.before = move.before;
     response.after = move.after;
-    response.createdAt = move.createdAt;
-    response.updatedAt = move.updatedAt;
-    response.deletedAt = move.deletedAt;
 
     return response;
   }
