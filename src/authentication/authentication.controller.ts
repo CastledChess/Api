@@ -6,7 +6,7 @@ import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from '../users/entities/user.entity';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthenticationResponseDto } from './dto/response/authentication-response.dto';
-import { RefreshTokenRequest } from './dto/request/refresh-token-request';
+import { RefreshTokenRequestDto } from './dto/request/refresh-token-request.dto';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -53,12 +53,12 @@ export class AuthenticationController {
    * @returns un access token et un refresh token avec les informations de l'utilisateur.
    */
   @ApiOperation({ summary: "Rafraîchissement du token d'authentification" })
-  @ApiBody({ type: RefreshTokenRequest })
+  @ApiBody({ type: RefreshTokenRequestDto })
   @ApiResponse({ status: 200, description: 'Token rafraîchi.' })
   @ApiResponse({ status: 401, description: 'Token invalide.' })
   @ApiResponse({ status: 400, description: 'Requête invalide.' })
   @Post('refresh')
-  async refresh(@Body() refreshTokenRequest: RefreshTokenRequest): Promise<AuthenticationResponseDto> {
+  async refresh(@Body() refreshTokenRequest: RefreshTokenRequestDto): Promise<AuthenticationResponseDto> {
     return this.authService.refresh(refreshTokenRequest.refreshToken);
   }
 }
