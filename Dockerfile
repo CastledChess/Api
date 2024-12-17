@@ -27,6 +27,7 @@ COPY --from=build /usr/src/app/dist ./dist
 # Démarrage de l'application en production
 CMD ["npm", "run", "start:prod"]
 
+
 # Étape 3 : Mode développement
 FROM node:22.8.0-alpine AS development
 
