@@ -30,7 +30,7 @@ export class AnalysisService {
     await this.validateUniqueAnalysis(createAnalysisDto.pgn, user.id);
 
     // Création de l'analyse dans une transaction pour garantir l'intégrité des données
-    // La transcation permet de faire plusieurs opérations en une seule fois
+    // La transaction permet de faire plusieurs opérations en une seule fois
     return await this.dataSource.transaction(async (manager) => {
       // Création de l'analyse
       const analysis = this.analysisRepository.create({
@@ -74,6 +74,11 @@ export class AnalysisService {
         moves: {
           move: true,
           engineResults: true,
+        },
+      },
+      order: {
+        moves: {
+          order: 'ASC',
         },
       },
     });
