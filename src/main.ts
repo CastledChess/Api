@@ -19,7 +19,10 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    origin: process.env.NODE_ENV === 'production' ? 'https://www.castled.app' : '*',
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   });
   app.use(json({ limit: '1mb' }));
   const apiMajorVersion = packageJson.version.split('.')[0];
