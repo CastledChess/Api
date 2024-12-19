@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { User } from '../users/user.entity';
+import { User } from '../users/entities/user.entity';
 import { CreateUserDto } from './dto/request/create-user.dto';
 import { LoginRequestDto } from './dto/request/login-request.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -40,28 +40,34 @@ export class AuthenticationService {
   }
 
   async validateUser(loginDto: LoginRequestDto): Promise<User> {
-    const user: User = await this.usersService.findOne(loginDto.email);
+    const user: User = await this.usersService.findOneByEmail(loginDto.email);
     if (!user || !(await bcrypt.compare(loginDto.password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
     return user;
   }
 
+  async refresh(refreshToken: string): Promise<AuthenticationResponseDto> {
+    const decoded = this.jwtService.decode(refreshToken) as { email: string };
+    const user: User = await this.usersService.findOneByEmail(decoded.email);
+    if (!user) {
+      throw new UnauthorizedException('Invalid token');
+    }
+    return this.login(user);
+  }
+
   private generateJwtToken(user: User): string {
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id, username: user.username };
     return this.jwtService.sign(payload);
   }
 
   private generateRefreshToken(user: User): string {
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id, username: user.username };
     return this.jwtService.sign(payload, { expiresIn: '7d' });
   }
 
-  private generateUserDto(user: User): UserDto {
-    return new UserDto(user.id, user.email, user.username);
-  }
-
   private generateLoginResponseDto(accessToken: string, refreshToken: string, user: User): AuthenticationResponseDto {
-    return new AuthenticationResponseDto(accessToken, refreshToken, this.generateUserDto(user));
+    const userDto = new UserDto(user);
+    return new AuthenticationResponseDto(accessToken, refreshToken, userDto);
   }
 }
