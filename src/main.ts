@@ -18,12 +18,7 @@ async function bootstrap() {
       transform: true, // Transforme les types automatiquement
     }),
   );
-  app.enableCors({
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-  });
+  app.enableCors();
   app.use(json({ limit: '1mb' }));
   const apiMajorVersion = packageJson.version.split('.')[0];
   // Si la version majeure de l'API est 0, on le définit à 1 sinon on garde la version actuelle
