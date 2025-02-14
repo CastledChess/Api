@@ -10,6 +10,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { AnalysisModule } from './analysis/analysis.module';
 import { MovesModule } from './moves/moves.module';
 import { InfoResultsModule } from './info-results/info-results.module';
+import { ChessModule } from './chess/chess.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { InfoResultsModule } from './info-results/info-results.module';
     AnalysisModule,
     InfoResultsModule,
     MovesModule,
+    ChessModule,
   ],
   controllers: [AppController],
   providers: [AppService],
