@@ -51,6 +51,8 @@ services:
       POSTGRES_PASSWORD: ${ELITE_DATABASE_PASSWORD}
     volumes:
       - 'postgres_elite_data:/var/lib/postgresql/data'
+      - './elitedb.sql:/usr/src/app/elitedb.sql'
+
     networks:
       - castled_api
 

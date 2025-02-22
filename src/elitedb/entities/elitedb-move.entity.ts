@@ -1,12 +1,11 @@
-import { CustomBaseEntity } from 'src/common/entities/custom-base.entity';
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
-@Entity('elitedb-moves')
-export class ElitedbMove extends CustomBaseEntity {
+@Entity('Move')
+export class ElitedbMove {
   @Column()
   san: string;
 
-  @Column()
+  @PrimaryColumn()
   position: string;
 
   @Column({ default: 0 })

@@ -2,10 +2,8 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DATABASE_TYPE } from './database.constants';
 
 export const getDatabaseConfig = (): TypeOrmModuleOptions => ({
-  name: process.env.DATABASE_DB,
   type: DATABASE_TYPE,
   url: process.env.DATABASE_URL,
-  entities: [__dirname + '/../**/*.entity.{js,ts}'],
-  // Si on est en production, on ne veut pas synchroniser pour éviter de perdre des données
+  entities: [__dirname + '/../**/*.entity.{js,ts}', '!' + __dirname + '/../elitedb/**/*.entity.{js,ts}'],
   synchronize: true,
 });
