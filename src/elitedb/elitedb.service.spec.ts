@@ -6,7 +6,7 @@ describe('ElitedbService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ElitedbService],
+      providers: [{ provide: 'elitedb_ElitedbMoveRepository', useValue: {} }, ElitedbService],
     }).compile();
 
     service = module.get<ElitedbService>(ElitedbService);
