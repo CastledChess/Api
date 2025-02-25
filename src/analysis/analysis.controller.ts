@@ -18,8 +18,9 @@ import { JwtAuthGuard } from '../authentication/jwt-auth.guard';
 import { User } from '../users/entities/user.entity';
 import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 import { Analysis } from './entities/analysis.entity';
-import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../common/constants';
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '../common/constants';
 import { AnalysisResponseDto } from './dto/response/analysis-response.dto';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 
 @ApiBearerAuth('access-token')
 @Controller('analysis')
@@ -40,16 +41,16 @@ export class AnalysisController {
 
   @ApiOperation({ summary: "Récupération des analyses de l'utilisateur connecté" })
   @ApiResponse({ status: 200, description: "Liste des analyses de l'utilisateur connecté." })
-  @ApiQuery({ name: 'page', required: true, schema: { default: DEFAULT_PAGE } })
+  @ApiQuery({ name: 'page', required: true, schema: { default: DEFAULT_PAGE_NUMBER } })
   @ApiQuery({ name: 'limit', required: true, schema: { default: DEFAULT_PAGE_SIZE } })
   @Get()
   async findPaginatedByUserId(
-    @Req() request: Request & { user: User },
-    @Query('page') page: number = DEFAULT_PAGE,
+    @CurrentUser() user: User,
+    @Query('page') page: number = DEFAULT_PAGE_NUMBER,
     @Query('limit') limit: number = DEFAULT_PAGE_SIZE,
   ): Promise<Pagination<Analysis>> {
     const options: IPaginationOptions = { page, limit };
-    return this.analysisService.findAllByUserId(request.user.id, options);
+    return this.analysisService.findAllByUserId(user.id, options);
   }
 
   @ApiOperation({ summary: "Récupération d'une analyse avec ses coups par ID" })

@@ -13,6 +13,7 @@ Ce projet est une API REST pour l'outil d'analyse de parties d'échecs "Castled"
 
 ## Prérequis
 Assurez-vous d'avoir installé les outils suivants :
+- Postgresql
 - Docker Desktop  ou Docker Engine & Docker Compose
 - Node.js
 - Git

@@ -2,7 +2,7 @@ import { Controller, Post, Body, HttpCode, UseGuards } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { LoginRequestDto } from './dto/request/login-request.dto';
 import { CreateUserDto } from './dto/request/create-user.dto';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from '../users/entities/user.entity';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthenticationResponseDto } from './dto/response/authentication-response.dto';
@@ -57,6 +57,7 @@ export class AuthenticationController {
   @ApiResponse({ status: 200, description: 'Token rafraîchi.' })
   @ApiResponse({ status: 401, description: 'Token invalide.' })
   @ApiResponse({ status: 400, description: 'Requête invalide.' })
+  @ApiBearerAuth('access-token')
   @Post('refresh')
   async refresh(@Body() refreshTokenRequest: RefreshTokenRequestDto): Promise<AuthenticationResponseDto> {
     return this.authService.refresh(refreshTokenRequest.refreshToken);

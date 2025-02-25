@@ -6,6 +6,7 @@ import * as packageJson from '../package.json';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ValidationPipe } from '@nestjs/common';
 import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
+import { json } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +19,7 @@ async function bootstrap() {
     }),
   );
   app.enableCors();
+  app.use(json({ limit: '1mb' }));
   const apiMajorVersion = packageJson.version.split('.')[0];
   // Si la version majeure de l'API est 0, on le définit à 1 sinon on garde la version actuelle
   app.setGlobalPrefix('api/' + (apiMajorVersion === '0' ? 'v1' : 'v' + apiMajorVersion));
