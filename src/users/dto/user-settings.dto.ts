@@ -1,7 +1,6 @@
 import { IsString, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { i18nValidationMessage } from 'nestjs-i18n';
-import { UserSettings } from '../entities/user-settings.entity';
 
 export class UserSettingsDto {
   @ApiProperty({ description: "La langue de l'utilisateur", example: 'fr' })
@@ -18,9 +17,7 @@ export class UserSettingsDto {
   @IsOptional()
   darkMode?: boolean;
 
-  constructor(settings: UserSettings) {
-    this.language = settings.language;
-    this.theme = settings.theme;
-    this.darkMode = settings.darkMode;
+  constructor(settings: Partial<UserSettingsDto>) {
+    Object.assign(this, settings);
   }
 }

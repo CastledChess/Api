@@ -19,6 +19,6 @@ export class UserDto {
     this.id = user.id;
     this.email = user.email;
     this.username = user.username;
-    this.settings = user.settings ? new UserSettingsDto(user.settings) : null;
+    this.settings = user.settings ? new UserSettingsDto(user.settings) : undefined;
   }
 }

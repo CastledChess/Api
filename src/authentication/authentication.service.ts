@@ -17,9 +17,9 @@ export class AuthenticationService {
 
   /**
    * Crée un nouvel utilisateur et le connecte.
-   * @param createUserDto les informations de l'utilisateur à créer.
-   * @returns l'utilisateur créé.
-   * @throws ConflictException si l'utilisateur existe déjà.
+   * @param {CreateUserDto} createUserDto - Les informations de l'utilisateur à créer.
+   * @returns {Promise<AuthenticationResponseDto>} L'utilisateur créé.
+   * @throws ConflictException Si l'utilisateur existe déjà.
    */
   async register(createUserDto: CreateUserDto): Promise<AuthenticationResponseDto> {
     const user: User = await this.usersService.create(createUserDto);
@@ -28,9 +28,9 @@ export class AuthenticationService {
 
   /**
    * Connecte un utilisateur.
-   * @param user l'utilisateur à connecter.
-   * @returns un access token.
-   * @throws UnauthorizedException si les informations de connexion sont invalides.
+   * @param {User} user - L'utilisateur à connecter.
+   * @returns {Promise<AuthenticationResponseDto>} Un access token.
+   * @throws {UnauthorizedException} Si les informations de connexion sont invalides.
    */
   async login(user: User): Promise<AuthenticationResponseDto> {
     const accessToken: string = this.generateJwtToken(user);
@@ -39,6 +39,12 @@ export class AuthenticationService {
     return this.generateLoginResponseDto(accessToken, refreshToken, user);
   }
 
+  /**
+   * Vérifie les informations de connexion de l'utilisateur.
+   * @param {LoginRequestDto} loginDto - Les informations de connexion.
+   * @returns {Promise<User>} L'utilisateur validé.
+   * @throws {UnauthorizedException} Si les informations de connexion sont invalides.
+   */
   async validateUser(loginDto: LoginRequestDto): Promise<User> {
     const user: User = await this.usersService.findOneByEmail(loginDto.email);
     if (!user || !(await bcrypt.compare(loginDto.password, user.password))) {
@@ -47,6 +53,12 @@ export class AuthenticationService {
     return user;
   }
 
+  /**
+   * Rafraîchit le token d'accès en utilisant un refresh token.
+   * @param {string} refreshToken - Le refresh token.
+   * @returns {Promise<AuthenticationResponseDto>} Un nouveau access token.
+   * @throws {UnauthorizedException} Si le refresh token est invalide.
+   */
   async refresh(refreshToken: string): Promise<AuthenticationResponseDto> {
     const decoded = this.jwtService.decode(refreshToken) as { email: string };
     const user: User = await this.usersService.findOneByEmail(decoded.email);
@@ -56,16 +68,33 @@ export class AuthenticationService {
     return this.login(user);
   }
 
+  /**
+   * Génère un token JWT pour un utilisateur.
+   * @param {User} user - L'utilisateur pour lequel générer le token.
+   * @returns {string} Le token JWT généré.
+   */
   private generateJwtToken(user: User): string {
     const payload = { email: user.email, sub: user.id, username: user.username };
     return this.jwtService.sign(payload);
   }
 
+  /**
+   * Génère un refresh token pour un utilisateur.
+   * @param {User} user - L'utilisateur pour lequel générer le token.
+   * @returns {string} Le refresh token généré.
+   */
   private generateRefreshToken(user: User): string {
     const payload = { email: user.email, sub: user.id, username: user.username };
     return this.jwtService.sign(payload, { expiresIn: '7d' });
   }
 
+  /**
+   * Génère le DTO de réponse pour une connexion réussie.
+   * @param {string} accessToken - L'access token.
+   * @param {string} refreshToken - Le refresh token.
+   * @param {User} user - L'utilisateur connecté.
+   * @returns {AuthenticationResponseDto} Le DTO de réponse de connexion.
+   */
   private generateLoginResponseDto(accessToken: string, refreshToken: string, user: User): AuthenticationResponseDto {
     const userDto = new UserDto(user);
     return new AuthenticationResponseDto(accessToken, refreshToken, userDto);

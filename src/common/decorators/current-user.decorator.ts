@@ -12,12 +12,10 @@ import { User } from '../../users/entities/user.entity';
 export const CurrentUser = createParamDecorator((data: unknown, ctx: ExecutionContext): User => {
   const logger = new Logger('CurrentUser');
   const request = ctx.switchToHttp().getRequest();
-
+  logger.debug("Récupération de l'utilisateur connecté");
   if (!request.user) {
     logger.warn('Aucun utilisateur trouvé dans la requête');
     return null;
   }
-
-  logger.debug(`Utilisateur récupéré: ${request.user.email}`);
   return request.user;
 });

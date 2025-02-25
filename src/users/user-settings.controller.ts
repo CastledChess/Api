@@ -1,5 +1,5 @@
-import { Controller, Get, Put, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Get, Put, Body, UseGuards, Logger } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../authentication/jwt-auth.guard';
 import { UserSettingsService } from './user-settings.service';
 import { UserSettingsDto } from './dto/user-settings.dto';
@@ -11,6 +11,7 @@ import { User } from './entities/user.entity';
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('access-token')
 export class UserSettingsController {
+  private readonly logger = new Logger(UserSettingsController.name);
   constructor(private readonly settingsService: UserSettingsService) {}
 
   /**
@@ -18,7 +19,7 @@ export class UserSettingsController {
    */
   @Get()
   @ApiOperation({ summary: "Récupération des paramètres de l'utilisateur" })
-  getSettings(@CurrentUser() user: User) {
+  getSettings(@CurrentUser() user: User): Promise<UserSettingsDto> {
     return this.settingsService.getSettings(user);
   }
 
@@ -27,7 +28,12 @@ export class UserSettingsController {
    */
   @Put()
   @ApiOperation({ summary: "Mise à jour des paramètres de l'utilisateur" })
-  updateSettings(@CurrentUser() user: User, @Body() updateSettingsDto: UserSettingsDto) {
+  @ApiBody({ type: UserSettingsDto })
+  @ApiBearerAuth('access-token')
+  updateSettings(@CurrentUser() user: User, @Body() updateSettingsDto: UserSettingsDto): Promise<UserSettingsDto> {
+    this.logger.debug(
+      `Mise à jour des paramètres de l'utilisateur avec l'ID ${user.id}: ${JSON.stringify(updateSettingsDto)}`,
+    );
     return this.settingsService.updateSettings(user, updateSettingsDto);
   }
 }
