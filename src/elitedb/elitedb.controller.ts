@@ -23,9 +23,7 @@ export class ElitedbController {
     }
     const splitFen = fen.split(' ');
     const sanitizedFen = `${splitFen[0]} ${splitFen[2]} ${splitFen[3]}`;
-    console.log(sanitizedFen);
 
-    const moves = await this.elitedbService.findMoves(sanitizedFen);
-    return moves;
+    return await this.elitedbService.findMoves(sanitizedFen);
   }
 }

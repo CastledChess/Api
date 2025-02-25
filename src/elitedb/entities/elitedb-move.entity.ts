@@ -1,8 +1,9 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, Index, PrimaryColumn } from 'typeorm';
 
 @Entity('Move')
+@Index(['position', 'san'], { unique: true })
 export class ElitedbMove {
-  @Column()
+  @PrimaryColumn()
   san: string;
 
   @PrimaryColumn()
