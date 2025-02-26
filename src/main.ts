@@ -34,3 +34,5 @@ async function bootstrap() {
 }
 
 bootstrap().then(() => {});
+
+export default bootstrap;
