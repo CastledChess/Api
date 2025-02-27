@@ -12,6 +12,7 @@ services:
     # On utilise la variable d'environnement définie dans le fichier .env.
     ports:
       - '${APP_PORT}:${APP_PORT}'
+      - '8080:8080'
     depends_on:
       - postgres
     networks:
