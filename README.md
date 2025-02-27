@@ -22,9 +22,7 @@ Assurez-vous d'avoir installé les outils suivants :
 ## Téléchargement du Projet
 Exécutez la commande suivante dans le répertoire souhaité (Un répertoire dans votre **distro WSL2 est recommandé si vous utilisez Windows**) :
 
-```sh
-https://github.com/CastledChess/Api.git
-```
+#### https://github.com/CastledChess/Api.git
 
 ## Configuration de l'Environnement
 **Ouvrez le projet dans votre IDE** et suivez les étapes suivantes pour configurer l'environnement.
@@ -78,3 +76,29 @@ docker exec -it <nom_du_conteneur> sh
 docker exec -it castled-api sh
 docker exec -it castled-postgres sh
 ```
+
+## Accéder à la documentation swagger
+
+Pour accéder à la documentation swagger et tester les endpoints API tout en ayant une documentation.
+Vous pouvez vous rendre sur le lien suivant :
+
+#### http://localhost:3000/api/docs
+
+## Accéder à la documentation compodoc
+
+Afin d'accéder à la documentation total du projet.
+Vous devez générer la documentation en exécutant la commande suivante :
+
+```sh
+docker exec -it castled-api npm run docs
+```
+ou
+
+```sh
+npm run docs
+# génère la documentation dans votre environnement local
+```
+
+Et ensuite vous rendre sur le lien suivant :
+
+#### http://localhost:8080
