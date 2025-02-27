@@ -24,6 +24,10 @@
 <title>cluster_MovesModule</title>
 <polygon fill="none" stroke="black" stroke-dasharray="1,5" points="92,-70 92,-268 404,-268 404,-70 92,-70"/>
 </g>
+<g id="clust4" class="cluster">
+<title>cluster_MovesModule_exports</title>
+<polygon fill="none" stroke="black" points="188,-208 188,-260 304,-260 304,-208 188,-208"/>
+</g>
 <g id="clust6" class="cluster">
 <title>cluster_MovesModule_providers</title>
 <polygon fill="none" stroke="black" points="248,-78 248,-130 396,-130 396,-78 248,-78"/>
@@ -31,10 +35,6 @@
 <g id="clust3" class="cluster">
 <title>cluster_MovesModule_imports</title>
 <polygon fill="none" stroke="black" points="100,-78 100,-130 240,-130 240,-78 100,-78"/>
-</g>
-<g id="clust4" class="cluster">
-<title>cluster_MovesModule_exports</title>
-<polygon fill="none" stroke="black" points="188,-208 188,-260 304,-260 304,-208 188,-208"/>
 </g>
 <!-- InfoResultsModule -->
 <g id="node1" class="node">
