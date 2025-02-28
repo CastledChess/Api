@@ -35,4 +35,4 @@ async function bootstrap() {
 
 bootstrap().then(() => {});
 
-export default bootstrap;
+// export default bootstrap;
