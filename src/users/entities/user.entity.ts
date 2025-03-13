@@ -4,6 +4,7 @@ import { Exclude } from 'class-transformer';
 import { CustomBaseEntity } from '../../common/entities/custom-base.entity';
 import { Analysis } from '../../analysis/entities/analysis.entity';
 import { UserSettings } from './user-settings.entity';
+import { UserTypeEnum } from './user-type.enum';
 
 @Entity('users')
 export class User extends CustomBaseEntity {
@@ -29,4 +30,11 @@ export class User extends CustomBaseEntity {
     cascade: true,
   })
   settings: UserSettings;
+
+  @Column({
+    type: 'enum',
+    enum: UserTypeEnum,
+    default: UserTypeEnum.CLASSIC,
+  })
+  accountType: UserTypeEnum;
 }

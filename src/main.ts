@@ -7,9 +7,12 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ValidationPipe } from '@nestjs/common';
 import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
 import { json } from 'express';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(cookieParser());
   app.useGlobalFilters(new AllExceptionsFilter(), new I18nValidationExceptionFilter());
   app.useGlobalPipes(
     new I18nValidationPipe(),
