@@ -43,16 +43,18 @@ services:
     # On expose le port de la base de données.
     # Généralement, le port 5432 est utilisé.
     ports:
+    # On fait un mapping du port 5433 de la base de données au port 5432
+    # Car le port 5432 est déjà utilisé par la base de données principale.
       - '5433:${DATABASE_PORT}'
     # On définit les variables d'environnement.
-    # Elles sont présentes dans le ficùier .env
+    # Elles sont présentes dans le fichier .env
     environment:
       POSTGRES_DB: ${ELITE_DATABASE_DB}
       POSTGRES_USER: ${ELITE_DATABASE_USER}
       POSTGRES_PASSWORD: ${ELITE_DATABASE_PASSWORD}
     volumes:
       - 'postgres_elite_data:/var/lib/postgresql/data'
-      - './elitedb.sql:/usr/src/app/elitedb.sql'
+      # - './elitedb.sql:/usr/src/app/elitedb.sql'
 
     networks:
       - castled_api
