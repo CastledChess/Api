@@ -14,6 +14,7 @@ export class LichessStrategy extends PassportStrategy(Strategy, 'lichess') {
       authorizationURL: 'https://lichess.org/oauth',
       tokenURL: 'https://lichess.org/api/token',
       clientID: configService.get<string>('LICHESS_CLIENT_ID'),
+      callbackURL: configService.get<string>('LICHESS_CALLBACK_URL'),
       scope: ['email:read', 'preference:read'],
     });
   }

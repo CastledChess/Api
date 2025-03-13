@@ -36,14 +36,16 @@ export class LichessService {
   async exchangeCodeForToken(code: string, codeVerifier: string): Promise<LichessTokenInterface> {
     try {
       const clientId = this.configService.get<string>('LICHESS_CLIENT_ID');
+      const redirectUri = this.configService.get<string>('LICHESS_CALLBACK_URL');
 
-      if (!clientId) {
+      if (!clientId || !redirectUri) {
         throw new InternalServerErrorException('Configuration OAuth Lichess incomplète');
       }
 
       const params = new URLSearchParams({
         grant_type: 'authorization_code',
         code,
+        redirect_uri: redirectUri,
         client_id: clientId,
         code_verifier: codeVerifier,
       });

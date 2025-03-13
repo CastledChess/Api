@@ -34,8 +34,9 @@ export class LichessController {
   login(@Res({ passthrough: true }) response: Response) {
     try {
       const clientId = this.configService.get<string>('LICHESS_CLIENT_ID');
+      const redirectUri = this.configService.get<string>('LICHESS_CALLBACK_URL');
 
-      if (!clientId) {
+      if (!clientId || !redirectUri) {
         this.logger.error('Configuration Lichess OAuth manquante');
         throw new Error('Configuration Lichess OAuth manquante');
       }
@@ -53,7 +54,7 @@ export class LichessController {
       const state = randomBytes(16).toString('hex');
 
       // Construction de l'URL d'autorisation Lichess
-      const url = this.buildLichessAuthorizationUrl(clientId, codeChallenge, state);
+      const url = this.buildLichessAuthorizationUrl(clientId, redirectUri, codeChallenge, state);
 
       return { url, statusCode: 302 };
     } catch (error) {
@@ -153,10 +154,16 @@ export class LichessController {
    * @param state État pour la protection CSRF
    * @returns L'URL d'autorisation complète
    */
-  private buildLichessAuthorizationUrl(clientId: string, codeChallenge: string, state: string): string {
+  private buildLichessAuthorizationUrl(
+    clientId: string,
+    redirectUri: string,
+    codeChallenge: string,
+    state: string,
+  ): string {
     const params = new URLSearchParams({
       response_type: 'code',
       client_id: clientId,
+      redirect_uri: redirectUri,
       scope: LichessOAuthConstants.OAUTH_SCOPES.join(' '),
       state,
       code_challenge: codeChallenge,
