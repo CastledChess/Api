@@ -12,6 +12,7 @@ import { MovesModule } from './moves/moves.module';
 import { InfoResultsModule } from './info-results/info-results.module';
 import { ChessModule } from './chess/chess.module';
 import { ElitedbModule } from './elitedb/elitedb.module';
+import { LichessModule } from './lichess/lichess.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ElitedbModule } from './elitedb/elitedb.module';
     MovesModule,
     ChessModule,
     ElitedbModule,
+    LichessModule,
   ],
   controllers: [AppController],
   providers: [AppService],
