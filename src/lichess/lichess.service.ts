@@ -9,7 +9,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { AuthenticationResponseDto } from '../authentication/dto/response/authentication-response.dto';
 import { LichessOAuthConstants } from './constants/lichess-oauth.constants';
 import { randomBytes } from 'crypto';
-import { UserTypeEnum } from 'src/users/entities/user-type.enum';
+import { UserTypeEnum } from '../users/entities/user-type.enum';
 
 /**
  * Service gérant l'interaction avec l'API Lichess
