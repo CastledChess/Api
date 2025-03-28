@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InfoResultResponseDto } from 'src/analysis/dto/response/info-result-response.dto';
-import { AnalysisMove } from 'src/analysis/entities/analysis-move.entity';
-import { InfoResult } from 'src/analysis/entities/info-result.entity';
+import { InfoResultResponseDto } from '../analysis/dto/response/info-result-response.dto';
+import { AnalysisMove } from '../analysis/entities/analysis-move.entity';
+import { InfoResult } from '../analysis/entities/info-result.entity';
 import { Repository, EntityManager } from 'typeorm';
 
 @Injectable()

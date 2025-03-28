@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
-import { AnalysisMoveResponseDto } from 'src/analysis/dto/response/analysis-move-response.dto';
-import { MoveResponseDto } from 'src/analysis/dto/response/move-response.dto';
-import { AnalysisMove } from 'src/analysis/entities/analysis-move.entity';
-import { Analysis } from 'src/analysis/entities/analysis.entity';
-import { Move } from 'src/analysis/entities/move.entity';
-import { InfoResultsService } from 'src/info-results/info-results.service';
+import { AnalysisMoveResponseDto } from '../analysis/dto/response/analysis-move-response.dto';
+import { MoveResponseDto } from '../analysis/dto/response/move-response.dto';
+import { AnalysisMove } from '../analysis/entities/analysis-move.entity';
+import { Analysis } from '../analysis/entities/analysis.entity';
+import { Move } from '../analysis/entities/move.entity';
+import { InfoResultsService } from '../info-results/info-results.service';
 import { Repository, EntityManager } from 'typeorm';
 
 @Injectable()
