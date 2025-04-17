@@ -103,17 +103,30 @@ export class LichessController {
         throw new UnauthorizedException("Session d'authentification expirée ou invalide");
       }
 
-      const authResponse = await this.lichessService.authenticateWithLichess(code, codeVerifier);
+      const { accessToken, refreshToken, user } = await this.lichessService.authenticateWithLichess(code, codeVerifier);
 
-      response.cookie('lichess_auth', authResponse.accessToken, {
-        httpOnly: true,
+      response.cookie('lichess_access_token', accessToken, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV !== 'development',
+        maxAge: LichessOAuthConstants.COOKIE_MAX_AGE,
+        sameSite: 'lax',
+      });
+
+      response.cookie('lichess_refresh_token', refreshToken, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV !== 'development',
+        maxAge: LichessOAuthConstants.COOKIE_MAX_AGE,
+        sameSite: 'lax',
+      });
+      response.cookie('lichess_user', JSON.stringify(user), {
+        httpOnly: false,
         secure: process.env.NODE_ENV !== 'development',
         maxAge: LichessOAuthConstants.COOKIE_MAX_AGE,
         sameSite: 'lax',
       });
 
       const front = this.configService.get<string>('FRONTEND_URL');
-      return response.redirect(`${front}/oauth?token=${authResponse.accessToken}`);
+      return response.redirect(`${front}/oauth`);
     } catch (error) {
       this.logger.error(`Erreur lors du callback d'authentification: ${error.message}`);
       throw error;
