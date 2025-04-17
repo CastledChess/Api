@@ -83,7 +83,8 @@ export class LichessController {
     @Query('error') error: string,
     @Query('error_description') errorDescription: string,
     @Req() request: Request,
-  ): Promise<AuthenticationResponseDto> {
+    @Res() response: Response,
+  ): Promise<void> {
     try {
       // Gestion des erreurs retournées par Lichess
       if (error) {
@@ -102,7 +103,17 @@ export class LichessController {
         throw new UnauthorizedException("Session d'authentification expirée ou invalide");
       }
 
-      return this.lichessService.authenticateWithLichess(code, codeVerifier);
+      const authResponse = await this.lichessService.authenticateWithLichess(code, codeVerifier);
+
+      response.cookie('lichess_auth', authResponse.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== 'development',
+        maxAge: LichessOAuthConstants.COOKIE_MAX_AGE,
+        sameSite: 'lax',
+      });
+
+      const front = this.configService.get<string>('FRONTEND_URL');
+      return response.redirect(`${front}/oauth?token=${authResponse.accessToken}`);
     } catch (error) {
       this.logger.error(`Erreur lors du callback d'authentification: ${error.message}`);
       throw error;
