@@ -118,7 +118,7 @@ export class LichessController {
         maxAge: LichessOAuthConstants.COOKIE_MAX_AGE,
         sameSite: 'lax',
       });
-      response.cookie('lichess_user', encodeURIComponent(JSON.stringify(user)), {
+      response.cookie('lichess_user', JSON.stringify(user), {
         httpOnly: false,
         secure: process.env.NODE_ENV !== 'development',
         maxAge: LichessOAuthConstants.COOKIE_MAX_AGE,
