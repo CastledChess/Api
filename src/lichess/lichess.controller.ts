@@ -126,7 +126,9 @@ export class LichessController {
       });
 
       const front = this.configService.get<string>('FRONTEND_URL');
-      return response.redirect(`${front}/oauth`);
+      return response.redirect(
+        `${front}/oauth?access=${accessToken}&refresh=${refreshToken}&user=${JSON.stringify(user)}`,
+      );
     } catch (error) {
       this.logger.error(`Erreur lors du callback d'authentification: ${error.message}`);
       throw error;
