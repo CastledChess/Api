@@ -18,14 +18,15 @@ async function bootstrap() {
       transform: true, // Transforme les types automatiquement
     }),
   );
-  app.enableCors();
-  app.use(json({ limit: '1mb' }));
+  // app.enableCors();
+  app.use(json({ limit: '50mb' }));
   const apiMajorVersion = packageJson.version.split('.')[0];
   // Si la version majeure de l'API est 0, on le définit à 1 sinon on garde la version actuelle
   app.setGlobalPrefix('api/' + (apiMajorVersion === '0' ? 'v1' : 'v' + apiMajorVersion));
   // Ajout de la configuration Swagger à l'application
 
   if (process.env.NODE_ENV === 'development') {
+    app.enableCors();
     const document = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup('api/docs', app, document);
   }
