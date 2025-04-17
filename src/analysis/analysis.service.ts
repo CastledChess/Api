@@ -7,7 +7,7 @@ import { User } from '../users/entities/user.entity';
 import { paginate, Pagination, IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { AnalysisResponseDto } from './dto/response/analysis-response.dto';
 import { I18nService } from 'nestjs-i18n';
-import { MovesService } from 'src/moves/moves.service';
+import { MovesService } from '../moves/moves.service';
 
 @Injectable()
 export class AnalysisService {

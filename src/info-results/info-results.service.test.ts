@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { InfoResultsService } from './info-results.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { InfoResult } from 'src/analysis/entities/info-result.entity';
+import { InfoResult } from '../analysis/entities/info-result.entity';
 import { Repository, EntityManager } from 'typeorm';
-import { InfoResultResponseDto } from 'src/analysis/dto/response/info-result-response.dto';
-import { AnalysisMove } from 'src/analysis/entities/analysis-move.entity';
+import { InfoResultResponseDto } from '../analysis/dto/response/info-result-response.dto';
+import { AnalysisMove } from '../analysis/entities/analysis-move.entity';
 
 describe('InfoResultsService', () => {
   let service: InfoResultsService;

@@ -22,6 +22,9 @@ export class AuthenticationService {
    * @throws ConflictException Si l'utilisateur existe déjà.
    */
   async register(createUserDto: CreateUserDto): Promise<AuthenticationResponseDto> {
+    if (createUserDto.role) {
+      throw new UnauthorizedException('Nice try madafaka');
+    }
     const user: User = await this.usersService.create(createUserDto);
     return this.login(user);
   }

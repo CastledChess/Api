@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from './dto/request/update-user.dto';
 import { UpdateUserPasswordDto } from './dto/request/update-user-password.dto';
 import { UserDto } from '../common/dto/user.dto';
+import { UserTypeEnum } from './entities/user-type.enum';
 
 @Injectable()
 export class UsersService {
@@ -26,7 +27,7 @@ export class UsersService {
    * @returns L'utilisateur créé.
    * @throws ConflictException si l'utilisateur existe déjà.
    */
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto, accountType: UserTypeEnum = UserTypeEnum.CLASSIC): Promise<User> {
     this.logger.debug(`Tentative de création de l'utilisateur avec l'email: ${createUserDto.email}`);
     const existingUser: User = await this.findOneByEmail(createUserDto.email);
     if (existingUser) {
@@ -38,6 +39,7 @@ export class UsersService {
     const user: User = this.usersRepository.create({
       ...createUserDto,
       password: hashedPassword,
+      accountType: accountType,
       settings: {},
     });
     const savedUser: User = await this.usersRepository.save(user);

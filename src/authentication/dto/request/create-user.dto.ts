@@ -1,4 +1,4 @@
-import { IsString, IsStrongPassword, IsEmail, IsNotEmpty } from 'class-validator';
+import { IsString, IsStrongPassword, IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { i18nValidationMessage } from 'nestjs-i18n';
 
@@ -17,6 +17,10 @@ export class CreateUserDto {
   @IsStrongPassword({}, { message: i18nValidationMessage('validation.IS_STRONG_PASSWORD') })
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
   password: string;
+
+  @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
+  @IsOptional()
+  role?: string;
 
   @ApiProperty({ description: 'The confirm password of the user', example: 'Password123.' })
   @IsStrongPassword({}, { message: i18nValidationMessage('validation.IS_STRONG_PASSWORD') })
